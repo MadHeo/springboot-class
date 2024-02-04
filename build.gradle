@@ -1,13 +1,20 @@
 plugins {
+<<<<<<< HEAD
 	id 'java'
 	id 'org.springframework.boot' version '3.0.9-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.1.4'
+=======
+    id 'java'
+    id 'org.springframework.boot' version '3.0.9-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.1.4'
+>>>>>>> 4f4b8c2 (3회차)
 }
 
 group = 'com.mysite'
 version = '0.0.1-SNAPSHOT'
 
 java {
+<<<<<<< HEAD
 	sourceCompatibility = '17'
 }
 
@@ -39,4 +46,42 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+=======
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.h2database:h2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+>>>>>>> 4f4b8c2 (3회차)
 }
