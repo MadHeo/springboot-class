@@ -11,8 +11,9 @@
 	<title>Hello, sbb!</title>
 </head>
 <body>
-<th:block layout:fragment="content">
-
-</th:block>
+<!-- 네비바 -->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
+<th:block layout:fragment="content"></th:block>
+<script th:src="@{/bootstrap.min.js}"></script>
 </body>
 </html>

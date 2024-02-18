@@ -8,6 +8,8 @@ import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
+import com.mysite.sbb.question.QuestionService;
+import com.mysite.sbb.user.UserService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,10 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<<<<<<< HEAD
-=======
 import org.springframework.transaction.annotation.Transactional;
->>>>>>> 4f4b8c2 (3회차)
 
 @SpringBootTest
 class SbbApplicationTests {
@@ -26,6 +25,10 @@ class SbbApplicationTests {
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerRepository answerRepository;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private UserService userService;
 
     @Test
     void testJpa() {
@@ -154,17 +157,12 @@ class SbbApplicationTests {
     }
 
     @Test
-<<<<<<< HEAD
-=======
     @Transactional
->>>>>>> 4f4b8c2 (3회차)
     void testJapAnswerSelect() {
         Optional<Answer> oa = this.answerRepository.findById(1);
         assertTrue(oa.isPresent());
         Answer a = oa.get();
         assertEquals(2, a.getQuestion().getId());
-<<<<<<< HEAD
-=======
     }
 
     @Test
@@ -178,8 +176,19 @@ class SbbApplicationTests {
 
         assertEquals(2, answerList.size());
         assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
->>>>>>> 4f4b8c2 (3회차)
 
+    }
+
+    @Test
+    void testInsertJap() {
+        for (int i = 1; i <= 300; i++) {
+            this.questionService.create("테스트 데이터[" + i + "]", "내용 없음");
+        }
+    }
+
+    @Test
+    void testPassword() {
+        this.userService.create("gtt3d", "ewaer@a4w3er.com", "dkssud3gk34tpdy123");
     }
 
 

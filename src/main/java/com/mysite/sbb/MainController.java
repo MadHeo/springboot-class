@@ -13,12 +13,9 @@ public class MainController {
     public String index() {
         return "index";
     }
-<<<<<<< HEAD
-=======
 
     @GetMapping("/")
     public String root() {
         return "redirect:/question/list";
     }
->>>>>>> 4f4b8c2 (3회차)
 }

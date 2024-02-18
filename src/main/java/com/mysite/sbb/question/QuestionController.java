@@ -3,6 +3,7 @@ package com.mysite.sbb.question;
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,13 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
 //        List<Question> questionList = this.questionRepository.findAll();
-        List<Question> questionList = this.questionService.getList();
-        model.addAttribute("questionList", questionList);
+
+//        List<Question> questionList = this.questionService.getList();
+//        model.addAttribute("questionList", questionList);
+        Page<Question> paging = questionService.getList(page);
+        model.addAttribute("paging", paging);
 
         return "question_list";
     }
@@ -57,7 +61,7 @@ public class QuestionController {
 
         // TODO 질문을 저장한다.
         this.questionService.create(questionForm.getSubject(), questionForm.getContent());
-
         return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
     }
+
 }

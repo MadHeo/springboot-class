@@ -21,11 +21,7 @@ public class Question {
     private String content; // 내용
     private LocalDateTime createDate; // 작성날짜
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "question")
-=======
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // fetch type = lazy -> 지연 로딩
->>>>>>> 4f4b8c2 (3회차)
     private List<Answer> answerList;
 
 }
