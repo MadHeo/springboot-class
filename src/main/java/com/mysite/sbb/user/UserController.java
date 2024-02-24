@@ -29,8 +29,6 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-        System.out.println(userCreateForm.getUsername() +
-                userCreateForm.getEmail() + userCreateForm.getPassword1());
 
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
@@ -38,14 +36,16 @@ public class UserController {
             return "signup_form";
         }
 
-        userService.create(userCreateForm.getUsername(),
-                userCreateForm.getEmail(), userCreateForm.getPassword1());
+        userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1(),
+                userCreateForm.getEmail());
 
         return "redirect:/";
     }
 
     @GetMapping("/login")
     public String login() {
+
         return "login_form";
+
     }
 }
