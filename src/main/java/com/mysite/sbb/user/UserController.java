@@ -4,6 +4,7 @@ import com.mysite.sbb.question.QuestionForm;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,16 +37,43 @@ public class UserController {
             return "signup_form";
         }
 
-        userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1(),
-                userCreateForm.getEmail());
+        try {
+            userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1(),
+                    userCreateForm.getEmail());
+
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "signup_form";
+        } catch (Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "signup_form";
+        }
 
         return "redirect:/";
     }
 
     @GetMapping("/login")
     public String login() {
-
         return "login_form";
-
     }
+
+//    @PostMapping("/login")
+//    public String login(@Valid UserLoginForm userLoginForm, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return "login_form";
+//        }
+//
+//        boolean isLoginSuccess = this.userService.isLogin(
+//                userLoginForm.getUsername(), userLoginForm.getPassword()
+//        );
+//        if (isLoginSuccess) {
+//            return "redirect:/";
+//        } else {
+//            bindingResult.reject("로그인 실패");
+//            return "login_form";
+//        }
+//    }
+
 }

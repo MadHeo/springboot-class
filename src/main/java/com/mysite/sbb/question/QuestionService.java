@@ -1,6 +1,7 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.DataNotFoundException;
+import com.mysite.sbb.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,11 +32,12 @@ public class QuestionService {
         }
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SiteUser siteUser) {
         Question q1 = new Question();
         q1.setSubject(subject);
         q1.setContent(content);
         q1.setCreateDate(LocalDateTime.now());
+        q1.setAuthor(siteUser);
         questionRepository.save(q1);
     }
 
@@ -46,5 +48,24 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
 
         return this.questionRepository.findAll(pageable);
+    }
+
+//    public void modify(Question question, String subject, String content) {
+//        question.setSubject(subject);
+//        question.setContent(content);
+//        question.setModifyDate(LocalDateTime.now());
+//        this.questionRepository.save(question);
+//    }
+
+    public void modify(Question question, QuestionForm questionForm) {
+        question.setContent(questionForm.getContent());
+        question.setSubject(questionForm.getSubject());
+        question.setModifyDate(LocalDateTime.now());
+
+        this.questionRepository.save(question);
+    }
+
+    public void delete(Question question) {
+        this.questionRepository.delete(question);
     }
 }

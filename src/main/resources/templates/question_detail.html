@@ -12,8 +12,22 @@
 			<div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
 			<div class="d-flex justify-content-end">
 				<div class="badge bg-light text-dark p-2 text-start">
+					<div class="mb-2">
+						<span th:if="${question.author != null}" th:text="${question.author.username}">
+						</span>
+					</div>
 					<div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 				</div>
+			</div>
+			<div class="my-3">
+				<a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
+				   sec:authorize="isAuthenticated()"
+				   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+				   th:text="수정"></a>
+				<a href="#" th:data-uri="@{|/question/delete/${question.id}|}"
+				   sec:authorize="isAuthenticated()"
+				   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+				   th:text="삭제" class="delete btn btn-sm btn-outline-secondary"></a>
 			</div>
 		</div>
 	</div>
@@ -23,11 +37,42 @@
 	<!-- 답변 반복 시작 -->
 	<div class="card my-3" th:each="answer : ${question.answerList}">
 		<div class="card-body">
-			<div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+			<!--답변 수정시 UI 변경 시작-->
+			<div th:classappend="'multi-collapse-'+${answer.id}" class="collapse multi-collapse show">
+				<div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+			</div>
+			<form th:action="@{|/answer/modify/${answer.id}|}" method="post" class="my-3" th:object="${answerForm}">
+				<div th:classappend="'multi-collapse-'+${answer.id}" class="collapse multi-collapse">
+					<input sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control inputValue"
+					       rows="3"
+					       th:value="${answerContent}" name="content">
+					<input type="submit" value="수정완료" class="btn btn-primary my-2">
+					<input type="button" value="수정취소" onclick="cancelBtn()" class="btn btn-danger my-2">
+				</div>
+			</form>
+			<!--답변 수정시 UI 변경 끝-->
 			<div class="d-flex justify-content-end">
 				<div class="badge bg-light text-dark p-2 text-start">
+					<div class="mb-2">
+						<span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+					</div>
 					<div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 				</div>
+			</div>
+			<div class="my-3">
+				<a class="btn btn-sm btn-outline-secondary btnModi"
+				   sec:authorize="isAuthenticated()"
+				   role="button"
+				   data-bs-toggle="collapse"
+				   aria-expanded="false" th:attr="data-bs-target='.multi-collapse-'+${answer.id}"
+				   th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+				   th:text="수정"></a>
+				<a href="#" th:data-uri="@{|/answer/delete/${answer.id}|}"
+				   sec:authorize="isAuthenticated()"
+				   th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+				   th:text="삭제"
+				   id="answerDelete"
+				   class="delete2 btn btn-sm btn-outline-secondary"></a>
 			</div>
 		</div>
 	</div>
@@ -35,8 +80,42 @@
 	<!-- 답변 작성 -->
 	<form th:action="@{|/answer/create/${question.id}|}" method="post" class="my-3" th:object="${answerForm}">
 		<div th:replace="~{form_error :: formErrors}"></div>
-		<textarea name="content" id="content" rows="10" class="form-control" th:field="*{content}"></textarea>
+		<textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control"
+		          rows="10"></textarea>
+		<textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
 		<input type="submit" value="답변등록" class="btn btn-primary my-2">
 	</form>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+	const deleteElements = document.getElementsByClassName("delete");
+
+	Array.from(deleteElements).forEach(function(el) {
+		el.addEventListener('click', function() {
+
+			if(confirm("정말로 삭제하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+
+	const answerElements = document.getElementsByClassName("delete2");
+
+	Array.from(answerElements).forEach(function(el) {
+		el.addEventListener('click', function() {
+			if(confirm("댓글을 삭제하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+
+	function cancelBtn(){
+		href
+	}
+
+	const btnModi = document.getElementsByClassName("btnModi");
+
+
+		document.getElementsByClassName("inputValue").value = "하이"
+</script>
 </html>
+

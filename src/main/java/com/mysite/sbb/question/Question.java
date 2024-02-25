@@ -1,6 +1,7 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,8 +21,11 @@ public class Question {
     @Column(columnDefinition = "TEXT")
     private String content; // 내용
     private LocalDateTime createDate; // 작성날짜
+    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // fetch type = lazy -> 지연 로딩
     private List<Answer> answerList;
 
+    @ManyToOne
+    private SiteUser author;
 }
