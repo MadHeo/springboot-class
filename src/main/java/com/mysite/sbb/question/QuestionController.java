@@ -4,6 +4,8 @@ import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
+import com.mysite.sbb.visit.Visit;
+import com.mysite.sbb.visit.VisitService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ public class QuestionController {
     //    private final QuestionRepository questionRepository;
     private final QuestionService questionService;
     private final UserService userService;
+    private final VisitService visitService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
@@ -43,6 +46,9 @@ public class QuestionController {
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
+
+        Visit visit = new Visit();
+        visitService.visit(question, visit, id);
 
         return "question_detail";
     }
@@ -114,5 +120,26 @@ public class QuestionController {
         this.questionService.delete(question);
         return "redirect:/";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String questionVote(Principal principal, @PathVariable("id") Integer id){
+        Question question = this.questionService.getQuestion(id);
+
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.questionService.vote(question, siteUser);
+        return String.format("redirect:/question/detail/%s", id);
+    }
+
+
+//    @GetMapping("/visit/{id}")
+//    public String questionVisit(Principal principal, @PathVariable("id") Integer id){
+//        System.out.println("하이");
+//        Question question = this.questionService.getQuestion(id);
+//
+//        SiteUser siteUser = this.userService.getUser(principal.getName());
+//        this.questionService.visit(question, siteUser);
+//        return String.format("redirect:/question/detail/%s", id);
+//    }
 
 }

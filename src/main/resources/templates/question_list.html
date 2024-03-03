@@ -12,6 +12,7 @@
 			<th style="width : 50%">제목</th>
 			<th>글쓴이</th>
 			<th>작성일시</th>
+			<th>조회수</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -24,11 +25,14 @@
 				      th:if="${#lists.size(question.answerList) > 0}"
 				      th:text="${#lists.size(question.answerList)}"
 				></span>
+				<span th:if="${#temporals.format(question.createDate, 'yyyy-MM-dd HH') == #calendars.format(#calendars.createNow(), 'yyyy-MM-dd HH')}" class="badge rounded-pill bg-primary">new</span>
 			</td>
 			<td>
 				<span th:if="${question.author != null}" th:text="${question.author.username}"></span>
 			</td>
 			<td>[[${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}]]</td>
+			<td><span
+					th:text="|${#lists.size(question.visitList)}|"></span></span></td>
 		</tr>
 		</tbody>
 	</table>

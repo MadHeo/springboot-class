@@ -58,6 +58,15 @@ public class UserController {
     public String login() {
         return "login_form";
     }
+    @GetMapping("/foundId")
+    public String foundId() {
+        return "found_id_form";
+    }
+
+    @GetMapping("/foundId/found")
+    public String foundIdGet(@Valid UserFoundIdForm userFoundIdForm) {
+        return "found_id_form";
+    }
 
 //    @PostMapping("/login")
 //    public String login(@Valid UserLoginForm userLoginForm, BindingResult bindingResult) {

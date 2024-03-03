@@ -2,12 +2,14 @@ package com.mysite.sbb.question;
 
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.visit.Visit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter //엔티티를 만들 때는 Setter 사용하지 않음. 부작용이 있을 수 있기 때문에 없애는 것이 좋음
@@ -28,4 +30,11 @@ public class Question {
 
     @ManyToOne
     private SiteUser author;
+
+    @ManyToMany
+    Set<SiteUser> voter;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // fetch type = lazy -> 지연 로딩
+    private List<Visit> visitList;
+
 }
