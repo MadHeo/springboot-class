@@ -31,13 +31,16 @@ public class QuestionController {
     private final VisitService visitService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page
+            , @RequestParam(value = "kw", defaultValue = "") String kw
+    ) {
 //        List<Question> questionList = this.questionRepository.findAll();
 
 //        List<Question> questionList = this.questionService.getList();
 //        model.addAttribute("questionList", questionList);
-        Page<Question> paging = questionService.getList(page);
+        Page<Question> paging = questionService.getList(page, kw);
         model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
 
         return "question_list";
     }
@@ -59,7 +62,7 @@ public class QuestionController {
         return "question_form";
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() and principal.username == 'admin'")
     @PostMapping(value = "/create")
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -123,7 +126,7 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Integer id){
+    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
 
         SiteUser siteUser = this.userService.getUser(principal.getName());

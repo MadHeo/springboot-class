@@ -179,12 +179,12 @@ class SbbApplicationTests {
 
     }
 
-    @Test
-    void testInsertJap() {
-        for (int i = 1; i <= 300; i++) {
-            this.questionService.create("테스트 데이터[" + i + "]", "내용 없음");
-        }
-    }
+//    @Test
+//    void testInsertJap() {
+//        for (int i = 1; i <= 300; i++) {
+//            this.questionService.create("테스트 데이터[" + i + "]", "내용 없음");
+//        }
+//    }
 
     @Test
     void testPassword() {
